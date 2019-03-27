@@ -1,0 +1,30 @@
+#include <iostream>
+#include <string>
+
+int main()
+{
+	std::string str1, str2, str3,str4;
+	//bool flag = false;
+	std::cin >> str1;
+
+	for (size_t i = 0; i <= str1.size(); ++i)
+	{
+		str4 = str1[i];
+		if (str1[i] >= '0' && str1[i] <= '9')
+		{
+			str2 += str1[i];
+			//flag = true;
+		}
+		else
+		{
+			if (str3.length() < str2.length())
+				str3 = str2;
+			else
+				str2.clear();
+		}
+	}
+
+	std::cout << str3 << std::endl;
+
+	return 0;
+}
