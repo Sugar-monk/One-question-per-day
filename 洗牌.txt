@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+void Shuffle(const int n, int k, std::vector<int> &arr)
+{
+	if (0 == k)
+		return;
+
+	std::stack<int> sta;
+	
+	while (k--)
+	{
+		int front = n - 1;
+		int end = arr.size() - 1;
+		for (size_t i = 0; i < n; ++i)
+		{
+			sta.push(arr[end--]);
+			sta.push(arr[front--]);
+		}
+		arr.clear();
+		for (size_t i = 0; i < 2*n; ++i)
+		{
+			arr.push_back(sta.top());
+			sta.pop();
+		}
+	}
+	/**/
+}
+
+int main()
+{
+	int ret = 0;
+	int group_num = 0;
+	std::cin >> group_num;
+
+	for (size_t i = 0; i < group_num; ++i)
+	{
+		int n;
+		int k;
+		std::cin >> n;
+		std::cin >> k;
+		std::vector<int> arr;
+
+		for (size_t i = 0; i < 2 * n; ++i)
+		{
+			int tmp;
+			std::cin >> tmp;
+			arr.push_back(tmp);
+		}
+		Shuffle(n, k, arr);
+		for (size_t i = 0; i < arr.size(); ++i)
+		{
+			std::cout << arr[i];
+			if (i != arr.size() - 1)
+				std::cout << " ";
+		}
+		std::cout << std::endl;
+ 	}
+
+
+	return 0;
+}
