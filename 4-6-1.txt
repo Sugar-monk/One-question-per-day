@@ -1,0 +1,25 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	long long a;
+	vector<int> arr;
+	while (cin >> a && a != 0)
+	{
+		int count;
+		while (a >= 2)
+		{
+			if (a % 3)
+				a = a / 3 + 1;
+			else
+				a = a / 3;
+			count++;
+		}
+		arr.push_back(count);
+	}
+	for (auto e : arr)
+		cout << e << endl;
+	return 0;
+}
