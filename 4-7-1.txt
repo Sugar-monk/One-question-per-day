@@ -1,0 +1,17 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int a,b,c,d;
+    cin >> a >> b >> c >> d;
+    int A = (c+a)/2;
+    int B = (d+b)/2;
+    int C = B - b;
+    if(A-B != a || B+C != d)
+        cout << "No" << endl;
+    else
+        cout << A << " " << B << " " << C <<endl;
+    return 0;
+}
