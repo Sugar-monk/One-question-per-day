@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string s, buff = "0123456789ABCDEF";
+    
+    int m,n;
+    cin >> m >> n;        //要转换的数字和要转换成的进制
+    bool flag = false;
+    
+    if(m < 0)
+    {
+        flag = true;        //如果是负数，最后要添加负号，在此标记
+        m = 0-m;            //去负号
+    }
+    
+    //按照十进制转换其他进制的依次取余数，倒序的方法做
+    while(m)
+    {
+        s += buff[m%n];
+        m /= n;
+    }
+    
+    if(flag)
+        s += '-';
+    
+    reverse(s.begin(),s.end());
+    
+    cout << s << endl;
+    return 0;
+}
