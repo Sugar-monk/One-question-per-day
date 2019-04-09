@@ -1,0 +1,27 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+	unsigned int a;
+
+	while (cin >> a)
+	{
+		cout << a << " " << "=" << " ";
+		for (unsigned i = 2; i <= sqrt(a); ++i)
+		{
+			int m = sqrt(a);
+			//用这个数模i，如果是整数，让a除等i，那么输出这个数，如果不是和下一个数模，直到a的算术平方根
+			while (a != i && 0 == a%i)			
+			{
+				cout << i << " " << "*" << " ";
+				a /= i;
+			}
+		}
+
+		cout << a << endl;
+	}
+	return 0;
+}
