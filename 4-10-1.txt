@@ -1,0 +1,28 @@
+// write your code her
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    int arr[100001];
+    arr[0] = 1;
+    arr[1] = 1;
+    for(size_t i = 2; i < 100001; ++i)
+    {
+        arr[i] = arr[i-1]+arr[i-2];
+        arr[i]=arr[i]%1000000;//只保留裴波那切数列的后六位
+    }
+    while(cin >> n && n !=EOF)
+    {
+        //裴波那切数列的第29位是大于6位数
+        if(n < 29)
+            cout << arr[n] << endl;
+        else
+            printf("%06d\n", arr[n]);
+    }
+    
+    return 0;
+}
