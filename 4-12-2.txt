@@ -1,0 +1,30 @@
+#include <stack>
+
+class Parenthesis {
+public:
+	bool chkParenthesis(string A, int n) {
+		// write code here
+		stack<char> at;
+		for (auto e : A)
+		{
+			switch (e)
+			{
+			case '(':
+				at.push(e);
+				break;
+			case ')':
+			{
+						if (at.empty() || at.top() != '(')
+							return false;
+						else
+							at.pop();
+			}
+				break;
+			default:
+				return false;
+			}
+		}
+
+		return true;
+	}
+};
