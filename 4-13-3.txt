@@ -1,0 +1,15 @@
+class UnusualAdd {
+public:
+    int addAB(int A, int B) {
+        // write code here
+        int tmp;
+        while(B)
+        {
+            tmp = A ^ B;
+            B = ( A&B ) << 1;
+            A = tmp;
+        }
+        
+        return tmp;
+    }
+};
