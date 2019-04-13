@@ -1,0 +1,21 @@
+#include <iostream>
+
+using namespace std;
+
+int RunBox(int n, int m)
+{
+    if(((n>=1)&&(m == 1) )|| ((m >=1 )&& (n == 1)))
+        return n + m;
+    else if(n > 1 && m > 1)
+        return RunBox(n-1,m) + RunBox(n,m-1);
+    else
+        return 0;
+}
+
+int main()
+{
+    int n,m,res;
+    while(cin >> n >> m)
+        cout << RunBox(n,m) << endl;
+    return 0;
+}
