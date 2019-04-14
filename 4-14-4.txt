@@ -1,0 +1,34 @@
+#include <iostream>
+#include <algorithm>
+/*根据位运算，获取每一位的二进制值。
+    获取第i位的值： (n >> i) & 1
+*/
+using namespace std;
+
+int main()
+{
+     int n;
+    while(cin >> n)
+    {
+       int count = 0, maxcount = 0;
+        while(n)
+        {
+            //如果最后一位是1，让count++
+            if(n&1)
+            {
+                ++count;
+                //更新最大值
+                maxcount = max(count,maxcount);
+            }
+            //如果不是1，说明已经不连续，让count清零
+            else
+            {
+                count = 0;
+            }
+            n = n >> 1;
+        }
+    
+        cout << maxcount << endl;
+    }
+    return 0;
+}
