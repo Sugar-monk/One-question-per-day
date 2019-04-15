@@ -1,0 +1,36 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string str1,str2;
+    int maxt = 0;
+    while(cin >> str1 >> str2)
+    {
+        //初始化buff
+        vector<vector<int>> buff(str1.size(),vector<int>(str2.size(), 0));
+        for(size_t i = 0; i < str1.size(); ++i)
+        {
+            for(size_t j = 0; j < str2.size(); ++j)
+            {
+                if(str1[i] == str2[j])
+                {
+                    //让buff[i][j]继承之间的连续，
+                    if(i >= 1 && j >= 1)
+                        buff[i][j] = buff[i-1][j-1] + 1;
+                    else
+                        buff[i][j] = 1;
+                }
+                maxt = max(maxt,buff[i][j]);
+            }
+        }
+        
+        cout << maxt << endl;
+    }
+    
+    return 0;
+}
