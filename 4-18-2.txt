@@ -1,0 +1,27 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int Month[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int y,m,d;
+    while(cin >> y >> m >> d)
+    {
+        int ret = 0;
+        for(size_t i = 0; i < m-1; ++i)
+        {
+            ret += Month[i];
+        }
+        ret += d;
+        if(m >= 2)
+        {
+            if(((y%4 == 0) && (y%100 != 0)) || y%400 == 0)
+                ret += 1;
+        }
+        
+        cout << ret << endl;
+    }
+    
+    return 0;
+}
