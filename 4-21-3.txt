@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string Card;
+    
+    while(getline(cin, Card))
+    {
+        //找这一堆牌中有没有一副手牌是有王炸的
+        if(Card.find("joker JOKER") != -1)
+            cout << "joker JOKER" << endl;
+        else
+        {
+            //将其分成两副牌
+            
+            //找到连接两副牌的标志
+            int pos = Card.find('-');
+            string s1 = Card.substr(0,pos);
+            string s2 = Card.substr(pos+1);
+            
+            //获取两幅扑克牌的数量
+            int c1 = count(s1.begin(),s1.end(),' ')+1;
+            int c2 = count(s2.begin(),s2.end(),' ')+1;
+            
+            //str用于比较开头的两张牌，直接比较他们在str字符串中的位置
+            string str = "345678910JQKA2jokerJOKER";
+            string s1_first = s1.substr(0,s1.find(' '));
+            string s2_first = s2.substr(0,s2.find(' '));
+            if(c1 == c2)
+            {
+                //走到这里，说明双方都没有王炸，如果牌的数量一样，有可能是顺子，或者是炸弹，那么第一张
+                //大的那一副扑克一定大
+                if(str.find(s1_first) > str.find(s2_first))
+                    cout << s1 << endl;
+                else
+                    cout << s2 << endl;
+            }
+            else
+            {
+                //如果数量不相同，说明类型不相同，那么只有炸弹可以和其他类型比较了
+                if(c1 == 4)
+                    cout << s1 << endl;
+                else if(c2 == 4)
+                    cout << s2 << endl;
+                else
+                    cout << "ERROR" << endl; 
+            }
+        }
+    }
+    
+    return 0;
+}
