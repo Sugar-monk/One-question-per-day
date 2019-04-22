@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+string addString(string num1,string num2)
+{
+    string ret = "";
+    int buff = 0;
+    int i = num1.size()-1;
+    int j = num2.size()-1;
+    
+    while(i >= 0 || j >= 0)
+    {
+        if(i >= 0)
+            buff += num1[i] - '0';//减0是为了将对应的字符数转换成对应的int
+        if(j >= 0)
+            buff += num2[j] - '0';
+        //要将其转换为对应的字符，所以要还原字符对应的数字
+        ret += (char)(buff%10 + '0'); //相当于尾插
+        
+        buff /= 10;
+        --i;
+        --j;
+    }
+    
+    if (buff == 1)
+        ret += '1';
+    
+    reverse(ret.begin(), ret.end());
+    
+    return ret;
+}
+
+int main()
+{
+    string num1,num2;
+    while(cin >> num1 >> num2)
+    {
+        cout << addString(num1,num2) << endl;
+    }
+    return 0;
+}
