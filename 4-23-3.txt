@@ -1,0 +1,33 @@
+#include <iostream>
+
+using namespace std;
+
+int Drink(int n)
+{
+    int ret = 0;
+    while(n > 1)
+    {
+        int can,sur;
+        //可以换的汽水的瓶数
+        can = n/3;
+        //换完之后还剩下的汽水瓶子
+        sur = n%3;
+        //总共剩下的汽水瓶子
+        n = can + sur;
+        //可以喝的汽水
+        ret += can;
+        
+        if(n == 2)
+            return ret+1;
+    }
+    
+    return ret;
+}
+
+int main()
+{
+    int n;
+    while(cin >> n)
+        cout << Drink(n) << endl;
+    return 0;
+}
