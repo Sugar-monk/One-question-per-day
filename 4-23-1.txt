@@ -1,0 +1,28 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    while(cin >> n)
+    {
+        
+        if(n <= 2)
+            cout << 1 << endl;
+        else
+        {
+            int front = 1;
+            int ret = 1;
+            for(int i = 2; i < n; ++i)
+            {
+                int tmp = ret;
+                ret += front;
+                front = tmp;
+            }
+            
+            cout << ret << endl;
+        }
+    }
+    return 0;
+}
