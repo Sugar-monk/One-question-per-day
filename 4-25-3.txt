@@ -1,0 +1,35 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+bool IsNum(int n)
+{
+    for(int i = 2; i <= sqrt(n); ++i)
+    {
+        if(n%i == 0)
+            return false;
+    }
+    
+    return true;
+}
+
+int main()
+{
+    int num;
+    while(cin >> num)
+    {
+        int half = num/2,i;
+        for(i = half; i > 0; --i)
+        {
+            if(IsNum(i) && IsNum(num-i))
+            {
+                break;
+            }
+        }
+        
+        cout << i << endl << num-i << endl;
+    }
+    
+    return 0;
+}
