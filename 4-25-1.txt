@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string str1,str2;
+    
+    while(cin >> str1 >> str2)
+    {
+        
+        //设str1短，不满则交换
+        if(str1.size() > str2.size())
+        {
+            swap(str1,str2);
+        }
+        int len1,len2;
+        len1 = str1.size();
+        len2 = str2.size();
+        
+        //创建一个二维数组开保存在截止到当前位置相同的字符串
+        vector<vector<int>> Buff(len1+1, vector<int>(len2+1, 0));
+        int start = 0,max = 0;
+        
+        for(int i = 1; i <= len1; ++i)
+        {
+            for(int j = 1; j <= len2; ++j)
+            {
+                if(str1[i-1] == str2[j-1])
+                {
+                    Buff[i][j] = Buff[i-1][j-1] + 1;
+                }
+                
+                //始终要保持max为最大
+                if(Buff[i][j] > max)
+                {
+                    max = Buff[i][j];
+                    start = i - max;
+                }
+            }
+        }
+        
+        //输出在str1中的字符串
+        cout << str1.substr(start,max) << endl;
+        
+    }
+    return 0;
+}
