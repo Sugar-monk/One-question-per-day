@@ -1,0 +1,47 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+	while (T)
+	{
+		int n, k, m;
+		cin >> n >> k;
+		vector<int> buff(2 * n);
+		
+		
+		for (int i = 0; i < 2*n; ++i)
+		{
+			cin >> buff[i];
+		}
+
+
+		while (k)
+		{
+			m = 2 * n - 1;
+			stack<int> tmp;
+			for (int i = n - 1; i >= 0; --i)
+			{
+				tmp.push(buff[m--]);
+				tmp.push(buff[i]);
+			}
+
+			for (int i = 0; i < buff.size(); ++i)
+			{
+				buff[i] = tmp.top();
+				tmp.pop();
+			}
+			--k;
+		}
+		for (int i = 0; i < buff.size() - 1; ++i)
+			cout << buff[i] << " ";
+		cout << buff[(buff.size() - 1)] << endl;
+		--T;
+	}
+	return 0;
+}
