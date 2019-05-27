@@ -1,0 +1,40 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int num,count = 0;
+    cin >> num;
+    if(num != 1 || num != 2 || num != 3)
+    {
+        unsigned long long int a, b, c;
+        a = 1;
+        b = 2;
+        c = 3;
+        while(1)
+        {
+            if(num >= a && num <= b)
+            {
+                int count1 = 0, count2 = 0;
+                while(num != a)
+                {
+                    ++a;
+                    ++count1;
+                }
+                while(num != b)
+                {
+                    --b;
+                    ++count2;
+                }
+                cout << min(count1,count2) << endl;
+                break;
+            }
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return 0;
+    }
+
+}
