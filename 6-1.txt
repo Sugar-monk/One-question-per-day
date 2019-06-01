@@ -1,0 +1,25 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int num;
+	cin >> num;
+	int Max = 0, count = 0;
+	while (num)
+	{
+		if ((num & 1) == 1)
+			++count;
+		else
+		{
+			Max = max(Max, count);
+			count = 0;
+		}
+		num = num >> 1;
+	}
+
+	cout << max(Max, count) << endl;
+	return 0;
+}
