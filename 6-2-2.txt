@@ -1,0 +1,24 @@
+int main()
+{
+	int n;
+	cin >> n;
+
+	vector<int> buff;
+	buff.resize(n);
+	for (int i = 0; i < n; ++i)
+		cin >> buff[i];
+	int p1 = 0, p2 = 0;
+	int max = buff[0];
+	for (size_t i = 1; i < buff.size(); ++i)
+	{
+		if (p2 < 0)
+		{
+			p2 = buff[i];
+		}
+		else
+			p2 += buff[i];
+		if (p2 > max)
+			max = p2;
+	}
+	return 0;
+}
