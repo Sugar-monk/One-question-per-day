@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<string> buff;
+    buff.resize(n);
+    for(auto& e : buff)
+        cin >> e;
+    
+    bool leng = true,lex = true;
+    for(int i = 1; i < buff.size(); ++i)
+    {
+        //比较长度
+        if(leng && buff[i-1].size() > buff[i].size())
+        {
+            leng = false;
+        }
+        
+        //判断字典序
+        if(lex && buff[i-1] > buff[i])
+        {
+            lex = false;
+        }
+    }
+    
+    if(leng && lex)
+        cout << "both" << endl;
+    else if (leng)
+        cout << "lengths" << endl;
+    else if (lex)
+        cout << "lexicographically" << endl;
+    else
+        cout << "none" << endl;
+    
+    return 0;
+}
