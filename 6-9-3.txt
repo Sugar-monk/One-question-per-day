@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+//每次以pos开始，每次向后走一个计算，遍历完一次后，pos向后走一个 走n^n次
+int getCount(vector<int> buff, int pos, int sum,int pro)
+{
+    int count = 0;
+    for(int i = pos; i < buff.size(); ++i)
+    {
+        sum += buff[i];
+        pro *= buff[i];
+        if(sum > pro)
+            count += 1 + getCount(buff, i+1, sum, pro);
+        else if(buff[i] == 1)
+            count += getCount(buff, i+1, sum, pro);
+        else
+            break;
+        
+        //在进行下一次搜索的时候要将sum和pro还原
+        sum -= buff[i];
+        pro /= buff[i];
+        
+        //查找重复的，如果有重复的，要直接跳过
+        while((i < buff.size()-1) && buff[i] == buff[i+1])
+            i++;
+        
+    }
+    
+    return count;
+}
+
+int main()
+{
+    int n;
+    while(cin >> n)
+    {
+        vector<int> buff;
+        buff.resize(n);
+        for(auto &e:buff)
+            cin >> e;
+        sort(buff.begin(), buff.end());
+        cout << getCount(buff,0,0,1) << endl;
+    }
+    return 0;
+}
