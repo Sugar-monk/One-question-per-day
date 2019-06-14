@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+int FindFiest(const string& str)
+{
+    int hash[1024] = {0};
+    for(auto e:str)
+        hash[e]++;
+    
+    for(size_t i = 0; i < str.size(); ++i)
+    {
+        if(hash[str[i]] == 1)
+            return i;
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    string str;
+    while(cin >> str)
+    {
+        int ret = FindFiest(str);
+        if(ret != -1)
+            cout << str[ret] << endl;
+        else
+            cout << ret << endl;
+    }
+    return 0;
+}
