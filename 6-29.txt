@@ -1,0 +1,50 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+	while (T)
+	{
+		int n, k, m;
+		cin >> n >> k;
+        //定义一个动态数组存放输入流
+		vector<int> buff(2 * n);
+		
+		//将剩余的牌存放在动态数组中
+		for (int i = 0; i < 2*n; ++i)
+		{
+			cin >> buff[i];
+		}
+
+        //开始洗牌
+		while (k)
+		{
+			m = 2 * n - 1;
+            //定义一个栈来存放洗好的牌
+			stack<int> tmp;
+			for (int i = n - 1; i >= 0; --i)
+			{
+				tmp.push(buff[m--]);
+				tmp.push(buff[i]);
+			}
+
+            //将洗好的牌放在数组中
+			for (int i = 0; i < buff.size(); ++i)
+			{
+				buff[i] = tmp.top();
+				tmp.pop();
+			}
+			--k;
+		}
+		for (int i = 0; i < buff.size() - 1; ++i)
+			cout << buff[i] << " ";
+		cout << buff[(buff.size() - 1)] << endl;
+		--T;
+	}
+	return 0;
+}
