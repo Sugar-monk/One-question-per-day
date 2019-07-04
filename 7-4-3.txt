@@ -1,0 +1,51 @@
+//两个指针一起走
+void oddInOddEvenInEven(vector<int>& arr, int len) {
+	int _d = len - 1;
+	int _f = 1;
+	while (_f < len && _d >= 0)
+	{
+		//将所有的奇数位都放成奇数，偶数位上自然就合适了
+		if (_f % 2 != 0 && arr[_f] % 2 == 0)//如果奇数位上不是奇数
+		{
+			while (_d >= 0)
+			{
+				if ((arr[_d] % 2) == 0)
+					_d--;
+				else if (((_d % 2) ^ (arr[_d] % 2)) == 0)
+					_d--;
+				else
+					break;
+			}
+			swap(arr[_f], arr[_d]);
+		}
+
+		_f += 2;
+	}
+}
+
+//一个指针的一直走
+void oddInOddEvenInEven1(vector<int>& arr, int len) {
+	int _f = 0;
+	while (_f < len)
+	{
+		//偶位不是偶数
+		if (_f % 2 == 0 && arr[_f] % 2 != 0)
+		{
+			int _r = _f + 1;
+			while (_r < len && arr[_r] % 2 != 0)
+				_r++;
+
+			swap(arr[_r], arr[_f]);
+		}
+		//奇位不是奇数
+		else if (_f % 2 != 0 && arr[_f] % 2 == 0)
+		{
+			int _r = _f + 1;
+			while (_r < len && arr[_r] % 2 != 0)
+				_r++;
+
+			swap(arr[_r], arr[_f]);
+		}
+		_f++;
+	}
+}
