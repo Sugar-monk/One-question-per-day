@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+typedef unsigned long long DataType;
+
+bool Zero(DataType a, DataType b, DataType c)
+{
+    if(a & b & c)
+        return false;
+    return true;
+}
+
+bool Add_n(DataType a, DataType b)
+{
+    return (a > b ? true : false);
+}
+bool Sub_n(DataType a, DataType b)
+{
+    return (a < b ? true : false);
+}
+
+bool Add(DataType a, DataType b, DataType c)
+{
+    if(Add_n((a+b), c) && Add_n((a+c),b) && Add_n((b+c),b))
+        return true;
+    
+    return false;
+}
+bool Sub(DataType a, DataType b, DataType c)
+{
+    vector<DataType> arr = {a, b, c};
+    sort(arr.begin(), arr.end());
+    
+    if(Sub_n((a-b), c) && Sub_n((a-c),b) && Sub_n((b-c),b))
+        return true;
+    
+    return false;
+}
+
+int main()
+{
+    DataType a, b, c;
+    while(cin >> a >> b >> c)
+    {
+        if(!Zero(a, b, c) && Add(a, b ,c) && Sub(a, b, c))
+            cout << "Yes" << endl;
+        else
+            cout << "No" << endl;
+    }
+    return 0;
+}
