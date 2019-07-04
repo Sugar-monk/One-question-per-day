@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int jumpFloorII(int number) {
+        if(number == 1 || number == 2 || number == 0)
+            return number;
+        double ret = pow(2.0, (double)(number-1));
+        int ret1 = ret;
+        
+        return ret1;
+    }
+};
