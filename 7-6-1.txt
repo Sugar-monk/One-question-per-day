@@ -1,0 +1,83 @@
+//快排
+//普通
+int Partion(vector<int>& arr, int left, int right)
+{
+	int key = arr[right-1];
+	int begin = 0;
+	int end = right-1;
+
+	while (begin < end)
+	{
+		while (begin < end && arr[begin] <= key)
+			begin++;
+		while (begin < end && arr[end] >= key)
+			end--;
+
+		if (begin != end)
+			swap(arr[begin], arr[end]);
+	}
+
+	if (begin != right - 1)
+		swap(arr[begin], arr[right - 1]);
+
+	return begin;
+}
+//挖坑
+int Partion1(vector<int>& arr, int left, int right)
+{
+	int end = right - 1;
+	int begin = left;
+	int key = arr[right - 1];
+
+	while (begin < end)
+	{
+		while (begin < end && arr[begin] <= key)
+			begin++;
+		if (begin < end)
+		{
+			arr[end] = arr[begin];
+			end--;
+		}
+
+		while (begin < end && arr[end] >= key)
+			end--;
+		if (begin < end)
+		{
+			arr[begin] = arr[end];
+			begin++;
+		}
+	}
+
+	arr[begin] = key;
+
+	return begin;
+}
+//齐头并进法
+int Partion2(vector<int>& arr, int left, int right)
+{
+	int key = arr[right - 1];
+	int cur = left;
+	int pre = cur - 1;
+
+	while (cur < right)
+	{
+		if (arr[cur] < key && ++pre != cur)
+		{
+			swap(arr[pre], arr[cur]);
+		}
+
+		cur++;
+	}
+	if (++pre != right-1)
+		swap(arr[pre], arr[right - 1]);
+	return pre;
+}
+void QuickSort(vector<int>& arr, int left, int right)
+{
+	if (right - left > 1)
+	{
+		int key = Partion2(arr, left, right);
+		QuickSort(arr, left, key);
+		QuickSort(arr, key + 1, right);
+	}
+}
