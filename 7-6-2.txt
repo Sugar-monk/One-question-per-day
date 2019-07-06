@@ -1,0 +1,41 @@
+//归并排序
+void _MergeData(vector<int>& arr, int left, int mid, int right, vector<int>& temp)
+{
+	int begin1 = left, end1 = mid;
+	int begin2 = mid, end2 = right;
+	int index = left;
+
+	while (begin1 < end1 && begin2 < end2)
+	{
+		if (arr[begin1] < arr[begin2])
+			temp[index++] = arr[begin1++];
+		else
+			temp[index++] = arr[begin2++];
+	}
+
+	while (begin1 < end1)
+		temp[index++] = arr[begin1++];
+	while (begin2 < end2)
+		temp[index++] = arr[begin2++];
+
+}
+void _MergeSort(vector<int>&arr, int left, int right, vector<int>& temp)
+{
+	if (right - left > 1)
+	{
+		int mid = left + ((right - left) >> 1);
+		_MergeSort(arr, left, mid,temp);
+		_MergeSort(arr, mid, right, temp);
+		_MergeData(arr, left, mid, right, temp);
+
+		/*for (int i = left; i < right; ++i)
+			arr[i] = temp[i];*/
+		copy(temp.begin() + left, temp.begin() + right, arr.begin() + left);
+	}
+}
+void MergeSort(vector<int>& arr)
+{
+	vector<int> temp;
+	temp.resize(arr.size());
+	_MergeSort(arr, 0, arr.size(), temp);
+}
