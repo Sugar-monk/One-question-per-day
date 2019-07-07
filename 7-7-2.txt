@@ -1,0 +1,150 @@
+
+template <class T>
+struct AVLNode
+{
+	AVLNode(const T& avl = T())
+	: _left(nullptr)
+	, _right(nullptr)
+	, _parent(nullptr)
+	, _data(val)
+	, _bf(0)
+	{}
+
+	AVLNode* _left;
+	AVLNode* _right;
+	AVLNode* _parent;
+
+	T _data;
+	T _bf;
+};
+
+template <class T>
+class AVLTree
+{
+public:
+	typedef AVLNode<T> Node;
+
+	bool Insert(const T& avl)
+	{
+		if (_root == nullptr)
+		{
+			_root = new Node(avl);
+			return true;
+		}
+
+		Node* cur = _root;
+		Node* parent = nullptr;
+
+		while (cur)
+		{
+			if (cur->_data < avl)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (cur->_data > val)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+				return false;	
+		}
+
+		cur = new Node(val);
+
+		if (parent->_data > val)
+			parent->_left = cur;
+		else
+			parent->_right = cur;
+
+		//开始更具平衡因子调平衡
+		while (parent)
+		{
+			//如果节点加在了左侧，平衡因子--，否则++
+			if (parent->_left == cur)
+				--parent->_bf;
+			else
+				++parent->_bf;
+
+			//如果当前平衡因子为0，说明已经平衡，可以直接跳出
+			if (parent->_bf == 0)
+				break;
+			//如果是1或者是-1，说明还需要继续向上调整
+			else if (parent->_bf == 1 || parent->_bf == -1)
+			{
+				cur = parent;
+				parent = parent->_parent;
+			}
+			//如果平衡因子是-2或者是2，说明以parent为根的树已经失衡，需要调整
+			else if (parent->_bf == -2 || parent->_bf == 2)
+			{
+				//如果是-2，说明左边多了，需要右旋，反之左旋
+				if (parent->_bf == -2)
+				{
+					RotateR(parent);
+				}
+				else
+				{
+
+				}
+			}
+		}
+	}
+
+	void RotateR(Node* parent)
+	{
+		Node* subL = parent->_left;
+		Node* subLR = subL->_right;
+
+		//向下链接
+		subL->_right = parent;
+		parent->_left = subLR;
+		
+		//双向链接
+		Node* gparent = parent->_parent;
+		subL->_parent = gparent;
+		
+		if (gparent->_left == parent)
+			gparent->_left = subL;
+		else
+			gparent->_right = subL;
+
+		//向上链接
+		if (subLR)
+			subLR->_parent = parent;
+		parent->_parent = subL;
+
+		//调整平衡因子
+		subL->_bf = parent->_bf = 0;
+		
+	}
+
+	void RotateL(Node* parent)
+	{
+		Node* subR = parent->_right;
+		Node* subRL = subR->_left;
+
+		//向下链接
+		subR->_left = parent;
+		parent->_right = subRL;
+
+		//双向链接
+		Node* gparent = parent->_parent;
+		subR->_parent = gparent;
+		if (gparent->_left == parent)
+			gparent->_left = subR;
+		else
+			gparent->_right = subR;
+		
+		//向上链接
+		if (subRL)
+			subRL->_parent = parent;
+		parent->_parent = subR;
+
+		//调整平衡因子
+		subR->_bf = parent->_bf = 0;
+	}
+private:
+	Node* _root;
+};
