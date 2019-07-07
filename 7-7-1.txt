@@ -1,0 +1,199 @@
+#include <iostream>
+
+using namespace std;
+
+template <class T>
+struct BSTNode
+{
+	BSTNode(const T& val = T())
+	:_left(nullptr)
+	, _right(nullptr)
+	, _data(val)
+	{}
+	BSTNode<T>* _left;
+	BSTNode<T>* _right;
+	T _data;
+};
+
+
+template <class T>
+class BSTree
+{
+public:
+	typedef BSTNode<T> Node;
+	BSTree(Node* root = nullptr)
+		:_root(root)
+	{}
+
+	Node* Find(const T& x)
+	{
+		Node* cur = _root;
+		if (_root == nullptr)
+			return nullptr;
+		while (cur)
+		{
+			if (cur->_data == val)
+				return cur;
+			else if (cur->_data > val)
+				cur = cur->_left;
+			else
+				cur = cur->_right;
+		}
+
+		return nullptr;
+	}
+
+	bool Inest(const T& val)
+	{
+		if (_root == nullptr)
+		{
+			_root = new Node(val);
+			return true;
+		}
+
+		Node *cur = _root;
+		Node *parent = nullptr;
+		while (cur)
+		{
+			if (cur->_data == val)
+				return true;
+			else if (val > cur->_data)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else
+			{
+				parent = cur;
+				cur = cur->_left;
+			}	
+		}
+
+		cur = new Node(val);
+		if (parent->_data < val)
+			parent->_right = cur;
+		else if (parent->_data > val)
+			parent->_left = cur;
+
+		return true;
+	}
+
+	void Inorder()
+	{
+		_Inorder(_root);
+		cout << endl;
+	}
+
+	bool Erase(const T& val)
+	{
+		if (_root == nullptr)
+			return false;
+
+		Node* cur = _root;
+		Node* parent = nullptr;
+
+		//找要删除的节点
+		while (cur)
+		{
+			if (cur->_data == val)
+				break;
+			else if (cur->_data > val)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+		}
+
+		if (cur == nullptr)
+			return false;
+
+		//cur为叶子节点
+		if (cur->_right == nullptr && cur->_left == nullptr)
+		{
+			if (cur != _root)
+			{
+				if (parent->_left == cur)
+					parent->_left = nullptr;
+				else
+					parent->_right = nullptr;
+			}
+			else
+				_root = nullptr;
+
+			delete cur;
+			cur = nullptr;
+		}
+		//cur有左子树
+		else if (cur->_right == nullptr)
+		{
+			if (cur != _root)
+			{
+				if (parent->_left == cur)
+					parent->_left = cur->_left;
+				else
+					parent->_right = cur->_left;
+			}
+			else
+				_root = nullptr;
+			delete cur;
+			cur = nullptr;
+		}
+		//cur有右子树
+		else if (cur->_left == nullptr)
+		{
+			if (cur != _root)
+			{
+				if (parent->_left == cur)
+					parent->_left = cur->_right;
+				else
+					parent->_right = cur->_right;
+			}
+			else
+				_root = nullptr;
+
+			delete cur;
+			cur = nullptr;
+		}
+		//cur既有左子树又有右子树
+		else
+		{
+			//找左子树中最大值与其置换
+			Node* leftMost = cur->_left;
+			parent = cur;
+
+			//左子树中最右边的就是最大值
+			while (leftMost->_right)
+			{
+				parent = leftMost;
+				leftMost = leftMost->_right;
+			}
+
+			//置换左子树最大值和cur
+
+			cur->_data = leftMost->_data;
+			if (parent->_right == leftMost)
+				parent->_right = nullptr;
+			else
+				parent->_left = nullptr;
+
+			delete leftMost;
+			leftMost = nullptr;
+		}
+	}
+private:
+	void _Inorder(Node* root)
+	{
+		if (root)
+		{
+			_Inorder(root->_left);
+			cout << root->_data << " ";
+			_Inorder(root->_right);
+		}
+	}
+	Node* _root;
+};
