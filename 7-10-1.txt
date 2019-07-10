@@ -1,0 +1,87 @@
+//前序遍历（非递归）
+void PreOrde1(BTreeNode* root)
+{
+	stack<BTreeNode*> buff;
+	BTreeNode* cur = root;
+	while (!buff.empty() || cur != NULL)
+	{
+		//向当前结点的左边一直延伸，直到NULL为止
+		while (cur)
+		{
+			cout << cur->data << " ";
+			buff.push(cur);
+			cur = cur->left;
+		}
+
+		//到这里就说明当前结点为空了
+		//如果栈中有数据，就说明不是二叉树的最后一个结点
+		//就需要继续向后走
+		if (!buff.empty())
+		{
+			BTreeNode* temp = buff.top();
+			buff.pop();
+			cur = temp->right;
+		}
+	}
+}
+//中序遍历（非递归）
+void InOrde1(BTreeNode* root)
+{
+	stack<BTreeNode*> buff;
+	BTreeNode* cur = root;
+
+	while (!buff.empty() || cur != NULL)
+	{
+		while (cur)
+		{
+			buff.push(cur);
+			cur = cur->left;
+		}
+
+		if (!buff.empty())
+		{
+			BTreeNode* temp = buff.top();
+			buff.pop();
+			cout << temp->data << " ";
+			cur = temp->right;
+		}
+	}
+}
+
+//后序遍历（非递归）
+void PostOrde1(BTreeNode* root)
+{
+	stack<BTreeNode*> buff;
+	BTreeNode* cur = root;
+	//使用一个栈来同步当前结点的右子树是否已经处理完
+	stack<bool> rf;
+	
+	while (!buff.empty() || cur != NULL)
+	{
+		while (cur)
+		{
+			buff.push(cur);
+			cur = cur->left;
+			//在判断栈中插入false，说明当前结点还有右子树没有遍历
+			rf.push(false);
+		}
+		if (!buff.empty())
+		{
+			bool temp = rf.top();
+			//如果是false，说明右子树还没有处理完
+			//否则可以打印当前结点，右子树已经遍历完了
+			if (temp)
+			{
+				cout << buff.top() << " ";
+				buff.pop();
+				rf.pop();
+			}
+			else
+			{
+				rf.pop();
+				rf.push(true);
+				cur = buff.top();
+			}
+		}
+	}
+}
