@@ -1,0 +1,94 @@
+// write your code here cpp
+#include <iostream>
+
+using namespace std;
+
+bool Prime(int n)
+{
+	return n==2 || n == 3 || n == 5 || n == 7 || n == 11;
+}
+bool leap(int n)
+{
+    if((n%4 == 0 && n%100 != 0) || n % 400 == 0)
+        return true;
+    return false;
+}
+
+int main()
+{
+	//每个月份可以赚多少
+	int arr[13] = { 0, 62, 28, 31, 60, 31, 60, 31, 62, 60, 62, 30, 62 };
+    int month[13] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+	int n_year = 579;
+	int year1, month1, day1, year2, month2, day2;
+	while (cin >> year1 >> month1 >> day1 >> year2 >> month2 >> day2)
+	{
+		int sum = 0;
+        if(year1 < year2)
+        {
+            //如果两个年份不一样，分为三步，计算整年，计算第一个年份还有多少天结束，计算第二个年份过了多少天
+            //计算整年，
+            for(int i = year1+1; i < year2; ++i)
+            {
+                sum += n_year;
+                if(leap(i))
+                    sum += 1;
+            }
+            
+            //计算第一个年份到年末需要多少天
+            for(int i = month1+1; i <= 12; ++i)
+            {
+                if(i == 2 && leap(year1))//如果当前月是2月，就要判断闰年
+                    sum += 1;
+                sum += arr[i];
+            }
+            int sub = month[month1] - day1 + 1;
+            if (!Prime(month1))
+                sub *= 2;
+            sum += sub;
+            
+            //计算第二个年份过了多少天
+            for(int i = month2-1; i > 0; --i)
+            {
+                if(i == 2 && leap(year2))//如果当前月是2月，就要判断闰年
+                    sum += 1;
+                sum += arr[i];
+            }
+            if (!Prime(month2))
+                day2 *= 2;
+            sum += day2;  
+        }
+        else
+        {
+            //如果是同一年就要看是不是在同一个月
+            if(month1 != month2)
+            {
+                //不在同一个月就要看一个月份结束还有多少天，第二个月份结束还有多少天
+                while (month1+1 < month2)
+	    	    {
+                    sum += arr[month1++];
+                }
+                int sub = month[month1] - day1 + 1;
+                if (!Prime(month1))
+                    sub *= 2;
+                sum += sub;
+                if (!Prime(month2))
+                    day2 *= 2;
+                sum += day2;  
+            }
+            else
+            {
+                //如果在同一个月，只需要计算两个时间差了多少天
+                int temp = 1;
+                if (!Prime(month2))
+                     temp *= 2;
+                
+                sum = (day2 - day1 + 1)*temp;
+            }
+            
+        }
+        
+		cout << sum << endl;
+	}
+	return 0;
+}
