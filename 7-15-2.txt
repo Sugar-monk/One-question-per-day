@@ -1,0 +1,82 @@
+/*************************************************************************
+ *文件名: insert.cpp
+ *作者: bean
+ *邮箱: 17331372728@163.com
+ * 创建时间: Mon 15 Jul 2019 01:55:04 AM PDT
+ * 备注:插入排序
+ *************************************************************************/
+#include<iostream>
+#include<string>
+#include<pthread.h>
+#include<vector>
+using namespace std;
+
+//直接插入算法
+void InsertSort(vector<int>& arr)
+{
+    int size = arr.size();
+    for (int i = 1; i < size; ++i)
+    {
+        //待插入元素
+        int key = arr[i];
+        //找插入位置
+        int end = i - 1;
+        while (end >= 0 && arr[end] > key)
+        {
+            arr[end + 1] = arr[end];
+            end--;
+        }
+        //开始插入
+        arr[end + 1] = key;
+    }
+}
+
+//优化版：折半查找插入算法
+void InsertSort1(vector<int>& arr)
+{
+    int size = arr.size();
+    for (int i = 1; i < size; ++i)
+    {
+        //待插入元素
+        int key = arr[i];
+        //找插入位置
+        int right = i - 1;
+        int left = 0;
+        if(arr[right] > key)
+        {
+            while (left <= right )
+            {
+                int mid = left+((right-left)>>1);
+                if(arr[mid] < key)
+                    left = mid+1;
+                else
+                    right = mid-1;
+            }
+        }
+        //开始搬移数据
+        int end = i -1;
+        while(end >= left)
+        {
+            arr[end+1] = arr[end];
+            --end;
+        }
+        //开始插入数据
+        arr[end + 1] = key;
+    }
+}
+int main(int argc, char* argv[])
+{
+    vector<int> arr;
+    for(int i = 20; i > 8; --i)
+        arr.push_back(i);
+    for(int i = 0; i < arr.size(); ++i)
+        cout << arr[i] << " ";
+    cout << endl;
+
+    InsertSort1(arr);
+
+    for(int i = 0; i < arr.size(); ++i)
+        cout << arr[i] << " ";
+    cout << endl;
+    return 0;
+}
