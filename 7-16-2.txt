@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    
+    while(getline(cin, str))
+    {
+        vector<string> buf;
+        string tmp;
+        int size = str.size();
+        for(int i = 0; i < size; ++i)
+        {
+            if((str[i] >= 'A' && str[i] <= 'Z') ||(str[i] >= 'a' && str[i] <= 'z'))
+                tmp.push_back(str[i]);
+            else if(!tmp.empty())
+            {
+                buf.push_back(tmp);
+                tmp.clear();
+            }
+        }
+        
+        if(!tmp.empty())
+            buf.push_back(tmp);
+        
+        for(int j = buf.size()-1; j > 0; --j)
+        {
+            cout << buf[j] << " ";
+        }
+        
+        cout << buf[0] << endl;
+        
+    }
+    return 0;
+}
