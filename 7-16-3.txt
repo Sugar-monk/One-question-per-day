@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    string buf;
+    while(getline(cin, str))
+    {
+        string tmp;
+        //添加一个判断条件，判断是否是第一个单词，就这样就不用每次都去调用buf.empty()
+        bool flag = true;  
+        for(int i = 0; i < str.size(); ++i)
+        {
+            if((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+                tmp.push_back(str[i]);
+            else if(!tmp.empty())   
+            {
+                //特殊情况的处理：如果是第一个单词，直接添加，不再后面追加空格
+                if(flag && buf.empty())
+                {
+                    buf = tmp;
+                    flag = false;
+                }
+                else
+                    buf = tmp + " " + buf;
+                
+                tmp.clear();
+            }
+        }
+        if(!tmp.empty())
+        {
+            if(buf.empty())
+                buf = tmp;
+            else
+                buf = tmp + " " + buf;
+        }
+        
+        cout << buf << endl;
+    }
+    return 0;
+}
