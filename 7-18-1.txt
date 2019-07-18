@@ -1,0 +1,39 @@
+// write your code here cpp
+#include <iostream>
+#include <string>
+#include <cctype>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    
+    while(cin >> str)
+    {
+        int size = str.size();
+        bool flag = false;
+        for(int i = 0; i < size; ++i)
+        {
+            if(str[i] == '_')
+            {
+                flag = true;
+                continue;
+            } 
+            if(flag)
+            {
+                str[i] = toupper(str[i]);
+                flag = false;
+            }
+        }
+        
+        for(auto a:str)
+        {
+            if(a != '_')
+                cout << a;
+        }
+        
+        cout << endl;
+    }
+    return 0;
+}
