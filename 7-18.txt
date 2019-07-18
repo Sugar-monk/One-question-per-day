@@ -1,0 +1,40 @@
+// write your code here cpp
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+bool Match(const string& A, const string& B)
+{
+    int bufA[256] = {0};
+    int bufB[256] = {0};
+    
+    for(auto a:A)
+        bufA[a]++;
+    
+    for(auto b:B)
+        bufB[b]++;
+    
+    for(int i = 65; i <= 90; ++i)
+    {
+        if(bufB[i] && (bufA[i] < bufB[i]))
+            return false;
+    }
+    
+    return true;
+}
+
+int main()
+{
+    string A;
+    string B;
+    
+    while(cin >> A >> B)
+    {
+        if(Match(A,B))
+            cout << "Yes" << endl;
+        else
+            cout << "No" << endl;
+    }
+    return 0;
+}
