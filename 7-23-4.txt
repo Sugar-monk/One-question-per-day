@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+//获取只有16个字符的净文件名
+string getFileName(string str)
+{
+    int pos = str.rfind('\\');
+    string str1 = str.substr(pos+1);
+    if(str1.size() > 16)
+        return str1.substr(str1.size()-16);
+    return str1;
+}
+
+//错误信息类
+struct errMation
+{
+    string file;
+    int numbers;
+    int count = 0;
+    
+    errMation(string _file, int _numbers)
+        :file(_file)
+        ,numbers(_numbers)
+        ,count(1)
+        {}
+    
+    bool operator==(const errMation& a)
+    {
+        return (file == a.file)&&(numbers == a.numbers);
+    }
+};
+
+int main()
+{
+    string file;
+    int numbers;
+    vector<errMation> buf;
+    while(cin >> file >> numbers)
+    {
+        errMation tmp(getFileName(file), numbers);
+        auto res = find(buf.begin(), buf.end(), tmp);
+        if(res == buf.end())
+            buf.push_back(tmp);
+        else
+            res->count++;   
+    }
+    
+    int count = 0;
+    for(auto a:buf)
+    {
+        if(count+8 >= buf.size())//只记录最后八条错误信息
+            cout << a.file << " " <<  a.numbers << " " << a.count << endl;
+        
+        count++;
+    }
+    
+    return 0;
+}
