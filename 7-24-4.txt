@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int> > &triangle) {
+        if(triangle.empty())
+            return 0;
+        
+        vector<vector<int> > minmum(triangle);
+        int line = triangle.size();
+        for(int i = line-2; i >= 0; --i)
+        {
+            for(int j = 0; j <= i; ++j)
+                minmum[i][j] = min(minmum[i+1][j], minmum[i+1][j+1]) + triangle[i][j];
+        }
+        
+        return minmum[0][0];
+    }
+};
