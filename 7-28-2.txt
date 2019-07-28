@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+int main()
+{
+	int n;
+	while (cin >> n)
+	{
+		vector<string> buf(n);
+		for (int i = 0; i < n; ++i)
+			cin >> buf[i];
+
+		stack<int> s;
+		for (int i = 0; i < n; ++i)
+		{
+			if (buf[i][0] >= '0' && buf[i][0] <= '9')
+				s.push(atoi(buf[i].c_str()));
+			else
+			{
+				int num1 = s.top();
+				s.pop();
+				int num2 = s.top();
+				s.pop();
+				switch (buf[i][0])
+				{
+				case '+': s.push(num2 + num1); break;
+				case '-': s.push(num2 - num1); break;
+				case '*': s.push(num2*num1); break;
+				case '/': s.push(num2 / num1); break;
+				}
+			}
+		}
+
+		cout << s.top() << endl;
+	}
+	return 0;
+}
