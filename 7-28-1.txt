@@ -1,0 +1,103 @@
+// write your code here cpp
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+bool Hor(string& str, int pos)
+{
+	int ret = 0;
+	if ((pos + 1) < 20 && str[pos + 1] == str[pos])
+		ret++;
+	if ((pos + 2) < 20 && str[pos + 2] == str[pos + 1])
+		ret++;
+	if ((pos - 1) >= 0 && str[pos - 1] == str[pos])
+		ret++;
+	if ((pos - 2) >= 0 && str[pos - 2] == str[pos - 1])
+		ret++;
+
+	return (ret == 4);
+}
+bool Ver(vector<string>& buf, int& pos1, int& pos2)
+{
+	int ret = 0;
+	if ((pos1 + 1) < 20 && buf[pos1 + 1][pos2] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 + 2) < 20 && buf[pos1 + 2][pos2] == buf[pos1 + 1][pos2])
+		ret++;
+	if ((pos1 - 1) >= 0 && buf[pos1 - 1][pos2] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 - 2) >= 0 && buf[pos1 - 2][pos2] == buf[pos1 - 1][pos2])
+		ret++;
+
+	return (ret == 4);
+}
+bool Right(vector<string>& buf, int& pos1, int& pos2)
+{
+	int ret = 0;
+	if ((pos1 + 1) < 20 && (pos2 + 1) < 20 && buf[pos1 + 1][pos2 + 1] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 + 2) < 20 && (pos2 + 2) < 20 && buf[pos1 + 2][pos2 + 2] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 - 1) >= 0 && (pos2 - 1) >= 0 && buf[pos1 - 1][pos2 - 1] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 - 2) >= 0 && (pos2 - 2) >= 0 && buf[pos1 - 2][pos2 - 2] == buf[pos1][pos2])
+		ret++;
+
+	return (ret == 4);
+}
+bool Left(vector<string>& buf, int& pos1, int& pos2)
+{
+	int ret = 0;
+	if ((pos1 - 1) >= 0 && (pos2 + 1) < 20 && buf[pos1 - 1][pos2 + 1] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 - 2) >= 0 && (pos2 + 2) < 20 && buf[pos1 - 2][pos2 + 2] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 + 1) < 20 && (pos2 - 1) >= 0 && buf[pos1 + 1][pos2 - 1] == buf[pos1][pos2])
+		ret++;
+	if ((pos1 + 2) < 20 && (pos2 - 2) >= 0 && buf[pos1 + 2][pos2 - 2] == buf[pos1][pos2])
+		ret++;
+
+	return (ret == 4);
+}
+
+bool Is_Win(vector<string>& buf)
+{
+	for (int i = 0; i < 20; ++i)
+	{
+		string &str = buf[i];
+		for (int j = 0; j < 20; ++j)
+		{
+			if (str[j] == '*')
+			{
+				if (Hor(str, j) || Ver(buf, i, j) || Left(buf, i, j) || Right(buf, i, j))
+					return true;
+			}
+			else if (str[i] == '+')
+			{
+				if (Hor(str, j) || Ver(buf, i, j) || Left(buf, i, j) || Right(buf, i, j))
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+
+int main()
+{
+	while (1)
+	{
+		vector<string> buf(20);
+		for (int i = 0; i < 20; ++i)
+			cin >> buf[i];
+
+		if (Is_Win(buf))
+			cout << "Yes" << endl;
+		else
+			cout << "No" << endl;
+	}
+	return 0;
+}
