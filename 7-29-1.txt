@@ -1,0 +1,81 @@
+//单例模式
+//饿汉
+class Singleton 
+{
+public:
+	static Singleton* GetInstance()
+	{
+		return &p;
+	}
+
+private:
+	//构造函数私有
+	Singleton()
+	{}
+	//防止被拷贝
+	Singleton(const Singleton&) = delete;
+	Singleton& operator=(const Singleton&) = delete;
+private:
+	static Singleton p;
+};
+
+Singleton Singleton::p;
+
+//懒汉
+
+#include <mutex>
+#include <thread>
+
+using namespace std;
+
+class Singleton1
+{
+public:
+	volatile Singleton1* GetInstance()
+	{
+		if (p == nullptr)//要采用DCL双检锁，让其他的线程可以不用等，直接返回。
+			//这样如果编译器对代码进行了优化，将创建对象的顺序重新调整，直接返回就会出错。
+		{
+			m_tex.lock();//如果这里只加这一个锁，然后去判断，其他线程会阻塞在这里等待解锁。
+			if (p == nullptr)
+				 p = new Singleton1;
+			m_tex.unlock();
+		}
+
+		return p;
+	}
+
+//	在释放资源的时候要保证所有线程已经将这份资源用完，但是不能直接在类中给出一个释放资源的函数，
+	//有可能忘记调用这个函数最好的方法是在类中内嵌一个类负责资源释放
+	class Clean
+	{
+	public:
+		~Clean()
+		{
+			if (Singleton1::p)
+			{
+				delete Singleton1::p;
+				Singleton1::p = nullptr;
+			}
+		}
+
+	};
+
+	static Clean c;
+
+private:
+	Singleton1()
+	{}
+	Singleton1(const Singleton1&) = delete;
+	Singleton1& operator=(const Singleton1&) = delete;
+private:
+	static  Singleton1 volatile *p;
+	static mutex m_tex;
+
+
+};
+//为对象添加volatile关键字，告诉系统取变量里面的信息的时候从内从中取，这样就禁止了编译器对变量的创建顺序进行优化
+//但是这样还不够，就是没有释放空间，会造成内存泄漏。
+volatile Singleton1* Singleton1::p = nullptr;
+mutex Singleton1::m_tex;
+Singleton1::Clean c;
