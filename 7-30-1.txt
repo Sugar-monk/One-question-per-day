@@ -1,0 +1,48 @@
+// write your code here cpp
+
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    string str1, str2;
+    while(cin >> str1 >> str2)
+    {
+        int size1 = str1.size();
+        int size2 = str2.size();
+        
+        //str1位横，str2为竖,初始化存储数组
+        vector<vector<int> > buf(size1,vector<int>(size2,0));
+        buf[0][0] = (str1[0] == str2[0]) ? 1 : 0;
+        for(int i = 1; i < size1; ++i)
+        {
+            buf[i][0] = (str1[i] == str2[0]) ? 1 : 0;
+            buf[i][0] = max(buf[i][0], buf[i-1][0]);
+        }
+        
+        for(int i = 1; i < size2; ++i)
+        {
+            buf[0][i] = (str1[0] == str2[i]) ? 1 : 0;
+            buf[0][i] = max(buf[0][i], buf[0][i-1]);
+        }
+        
+        //根据状态转移方程进行计算
+        for(int i = 1; i < size1; ++i)
+        {
+            for(int j = 1; j < size2; ++j)
+            {
+                buf[i][j] = max(buf[i-1][j], buf[i][j-1]);
+                if(str1[i] == str2[j])
+                    buf[i][j] = max(buf[i][j], buf[i-1][j-1]+1); 
+            }
+        }
+        
+        cout << buf[size1-1][size2-1] << endl;
+    }
+    
+    return 0;
+}
