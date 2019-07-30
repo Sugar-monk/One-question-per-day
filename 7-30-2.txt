@@ -1,0 +1,45 @@
+// write your code here cpp
+
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    while(cin >> n)
+    {
+        vector<string> buf(n);
+        vector<bool> flag(n, true);
+        
+        for(int i = 0; i < n; ++i)
+            cin >> buf[i];
+        
+        sort(buf.begin(), buf.end());
+        
+        for(int i = 0; i < buf.size()-1; ++i)
+        {
+            if(buf[i] == buf[i+1])
+                flag[i] = false;
+            else if(buf[i].size() < buf[i+1].size())
+            {
+                if(buf[i]==buf[i+1].substr(0,buf[i].size())&&buf[i+1][buf[i].size()]=='/')
+                    flag[i] = false;
+            }
+        }
+        
+        for(int i = 0; i < buf.size(); ++i)
+        {
+            if(flag[i])
+                cout << "mkdir -p " << buf[i] << endl;
+        }
+        
+        cout << endl;
+    }
+    
+    
+    return 0;
+}
