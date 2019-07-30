@@ -1,0 +1,41 @@
+//继承
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person
+{
+public:
+	string _name;
+};
+
+class Student : public Person
+{
+protected:
+	int _sid = 100;
+};
+
+class Teacher : public Person
+{
+protected:
+	int _tid = 99;
+};
+
+class Classroom : public Teacher , public Student
+{
+protected:
+	int _number = 2;
+};
+
+int main()
+{
+	Classroom a;
+	//会产生二义性，不明确访问哪一个
+	//a._name = "Bob";
+	a.Teacher::_name = "Bob";
+	a.Student::_name = "Green";
+
+	return 0;
+}
