@@ -1,0 +1,26 @@
+//非递归归并排序
+void _MergeSort1(vector<int>& arr)
+{
+	int gap = 1;
+	int size = arr.size();
+	vector<int> temp(arr.size());
+
+	while (gap < size)
+	{
+		for (int i = 0; i < size; i += gap)
+		{
+			int left = i;
+			int mid = i + gap;
+			int right = mid + gap;
+
+			if (mid > size)
+				mid = size;
+			if (right > size)
+				right = size;
+
+			_MergeData(arr, left, mid, right, temp);
+			copy(temp.begin() + left, temp.begin() + right, arr.begin() + left);
+		}
+		gap *= 2;
+	}
+}
