@@ -1,0 +1,60 @@
+/*************************************************************************
+*文件名: wait.c
+*作者: bean
+*邮箱: 17331372728@163.com
+* 创建时间: Thu 01 Aug 2019 05:28:40 PM PDT
+* 备注: 这是一个实现进程等待的dome，以及子进程退出的返回值
+*************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/wait.h>
+
+int main(int argc, char* argv[])
+{
+    int pid = fork();
+    if(pid < 0)
+    {
+        //errno是一个全局变量，存储每次系统调用出现错误的原因编号
+        //strerror通过错误编号获取字符串错误原因
+        printf("fork error: %s\n", strerror(errno));
+        //perror直接打印上一个系统调用的错误原因
+        perror("fork error");
+    }
+    else if(pid == 0)
+    {
+        sleep(3);
+        exit(256);
+    }
+
+    //wait(NULL);
+    //阻塞等待任意一个子进程退出，获取返回值
+
+    //pid_t waitpid(pid_t pid, int *status, int options);
+    //阻塞等待任意一个子进程或者指定的子进程退出
+    //pid： -1：等待任意一个子进程      >0：等待指定子进程 
+    //options:  WNOHANG:将waitpid设置为非阻塞; 0 是默认阻塞
+    //返回值：若WNOHANG被指定，没有子进程退出则立即报错返回0；错误返回 ； -1
+    int statu;
+    while(waitpid(-1, &statu, WNOHANG) == 0)
+    {
+        //非阻塞的轮询操作
+        printf("drink coffee\n");
+        sleep(1);
+    }
+    if((statu & 0x7f) == 0)
+    {
+        printf("exit code : %d\n", (statu >> 8) & 0xff);
+    }
+
+    //printf("exit code:%d\n", statu);
+    while(1)
+    {
+        printf("I am parent\n");
+        sleep(1);
+    }
+	return 0;
+}
+
