@@ -1,0 +1,68 @@
+/*************************************************************************
+ *文件名: minshell.c
+ *作者: bean
+ *邮箱: 17331372728@163.com
+ * 创建时间: Thu 01 Aug 2019 10:36:45 PM PDT
+ * 备注:这是一个迷你shell
+ *************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <pthread.h>
+#include <errno.h>
+int main(int argc, char* argv[])
+{
+    while(1)
+    {
+        printf("----> ");
+        fflush(stdout);
+
+        char tmp[1024] = {0};
+        scanf("%[^\n]%*c", tmp);
+        //printf("[%s] \n", tmp);
+
+        //将整体字符串解析出：程序名称+参数
+        //“ls   -a  -l  ” -->"ls"  "-a"  "-l"
+        char* ptr = tmp;
+        int argc = 0;
+        char* argv[32] = {NULL};
+
+        while(*ptr != '\0')
+        {
+            //如果当前字符不为空白字符，要存放到argv中
+            if(!isspace(*ptr))
+            {
+                //将以非空白字符的字符串存放在argv[grac]中
+                argv[argc] = ptr;
+                argc++;
+                //如果当前字符不为空白，继续向后走，直到为空白处，argv[argc]位置的字符串终止
+                while(!isspace(*ptr) && *ptr != '\0')
+                    ptr++;
+                //将当前字符串的最后一个空白字符换成\0,标志argv[argc]处字符串结束
+                *ptr = '\0';
+                ptr++;
+                continue;
+            }
+            ptr++;
+        }
+        argv[argc] = NULL;
+       if(!strcmp(argv[0], "cd"))
+        {
+            chdir(argv[1]);
+            continue;
+        }
+
+        int pid = fork();
+        if(pid == 0)
+        {
+            execvp(argv[0], argv);
+            exit(0);
+        }
+        wait(NULL);
+
+    }
+    return 0;
+}
