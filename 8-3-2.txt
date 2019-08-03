@@ -1,0 +1,59 @@
+class Solution {
+public:
+    
+    int pos[4][2]= {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    void DFS(vector<vector<char> >& board, int row, int col, int x, int y)
+    {
+        
+        board[x][y] = 'N';
+        
+        for(int i = 0; i < 4; ++i)
+        {
+            int nx = x + pos[i][0];
+            int ny = y + pos[i][1];
+            if(nx < 0 || nx >= row || ny < 0 || ny >= col)
+                continue;
+            
+            if(board[nx][ny] == 'O')
+                DFS(board, row, col, nx, ny);
+        }
+    }
+    void solve(vector<vector<char>>& board) {
+        
+        if(board.empty())
+            return ;
+        int row = board.size();
+        int col = board[0].size();
+        
+        //查找第一行和最后一行
+        for(int i = 0; i < col; ++i)
+        {
+            if(board[0][i] == 'O')
+                DFS(board, row, col, 0, i);
+            if(board[row-1][i] == 'O')
+                DFS(board, row, col, row-1, i);
+        }
+        //查找第一列和最后一列
+        for(int i = 0; i < row; ++i)
+        {
+            if(board[i][0] == 'O')
+                DFS(board, row, col, i, 0);
+            if(board[i][col-1] == 'O')
+                DFS(board, row, col, i, col-1);
+        }
+        
+        //将矩阵中所有的O替换为X，所有的标记替换为O
+        
+        for(auto &e : board)
+        {
+            for(auto &a : e)
+            {
+                if(a == 'O')
+                    a = 'X';
+                if(a == 'N')
+                    a = 'O';
+            }
+        }
+        
+    }
+};
