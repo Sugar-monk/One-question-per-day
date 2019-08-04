@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string Work(const string& buf)
+{
+	string ret;
+
+	int pos = 0;
+	int size = buf.size();
+	bool flag = true;
+	string tmp;
+	//先把字符串中连续的字符串找出来，如果不连续，就放入ret中
+
+	while (pos < size)
+	{
+		tmp.push_back(buf[pos]);
+		if (pos + 1 < size && buf[pos] + 1 == buf[pos + 1])
+		{
+			int n = pos;
+			int count = 1;
+			while (n + 1 < size && buf[n] + 1 == buf[n + 1])
+			{
+				++n;
+				++count;
+			}
+			if (count >= 4)
+			{
+				tmp = tmp + "-" + buf[n];
+				pos = n;
+			}
+		}
+		ret += tmp;
+		tmp.clear();
+		++pos;
+	}
+
+
+	return ret;
+}
+
+int main()
+{
+	int n;
+	while (cin >> n)
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			string buf;
+			cin >> buf;
+			cout << Work(buf) << endl;
+		}
+	}
+
+	return 0;
+}
