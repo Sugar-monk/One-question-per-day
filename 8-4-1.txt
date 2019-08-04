@@ -1,0 +1,21 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int x, f, d, p;
+    while(cin >> x >> f >> d >> p)
+    {
+        int sum = f;
+        if(sum > (d/x))
+            sum = d/x;
+        else
+        {
+            d -= x*f;
+            sum += d/(p+x);
+        }
+        
+        cout << sum << endl;
+    }
+}
