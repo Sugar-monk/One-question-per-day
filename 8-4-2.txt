@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string str;    //用来接收字符串
+    string buf;    //用来保存临时字符串
+    
+    while(getline(cin, str))
+    {
+        string tmp;
+        int size = str.size();
+        bool flag = true;
+        for(int i = 0; i < size; ++i)
+        {
+            if((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z'))
+                tmp.push_back(str[i]);
+            else if(!tmp.empty())
+            {
+                if(flag)
+                {
+                    buf = tmp;
+                    flag = false;
+                }
+                else
+                    buf = tmp + " " + buf;
+                
+                tmp.clear();
+            }
+        }
+        if(!tmp.empty())
+            buf = tmp + " " + buf;
+        
+        cout << buf << endl;
+    }
+    return 0;
+}
