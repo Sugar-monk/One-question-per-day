@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void find(int n, int m, vector<int>& s, int pos)
+{
+    if(m == 0)
+    {
+        for(int i = 0; i < s.size()-1; ++i)
+            cout << s[i] << " ";
+        cout << s[s.size()-1] << endl;
+    }
+    
+    for(int i = pos; i <= n && i <= m; ++i)
+    {
+        s.push_back(i);
+        find(n, m-i, s, i+1);
+        s.pop_back();
+    }
+}
+
+int main()
+{
+    int n, m;
+    while(cin >> n >> m)
+    {
+        vector<int> s;
+        find(n, m, s, 1);
+    }
+    return 0;
+}
