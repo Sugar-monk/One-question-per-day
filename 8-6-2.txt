@@ -1,0 +1,164 @@
+template <class V>
+struct HashNode
+{
+	V _data;
+	HashNode<V>* _next;
+
+	HashNode(const V& data)
+		:_data(data)
+		,_next(nullptr)
+	{}
+};
+
+template <class K,class V, class KeyofVal>
+struct _Htor //哈希迭代器
+{
+	typedef HashNode<V> Node;
+	typedef Node* pNode;
+
+	typedef _Htor<K, V, KeyofVal> self;
+	typedef HashTable<K, V, KeyofVal> HashT;
+
+	HashT* _ht;
+	pNode _node;
+
+	_Htor(pNode node, HashT* ht)
+		:_node(node)
+		,_ht(ht)
+	{}
+
+	V& operator*()
+	{
+		return _node->_data;
+	}
+
+	V* operator->()
+	{
+		return &operator*();
+	}
+
+	bool operator!=(const self& it)
+	{
+		return _node != it._node;
+	}
+
+	self operator++()
+	{
+		if (_node->_next)
+			_node = _node->_next;
+		else
+		{
+			//找到下一个非空链表的头节点
+			//计算当前_node所在的位置
+			KeyofNode kov;
+			size_t index = kov(_node->data) % _ht->_table.size();
+
+			//要从当前位置的下一个地方开始查找
+			++index;
+
+			for (; index < _ht->table.size(); ++index)
+			{
+				//找到一个非空链表的头节点
+				if (_ht->_table[index])
+				{
+					_node = ht->_table[index];
+					break;
+				}
+			}
+
+			//如果没有找到，index会在最后一个哈希表的位置，返回空。
+			if (index == _ht->_table.size())
+				_node = nullptr;
+		}
+
+		return *this;
+	}
+};
+
+template <class K, class V, class KeyofVal>
+class HashTable
+{
+public:
+	typedef HashNode<V> Node;
+	typedef Node* pNode;
+
+public:
+
+	iterator begin()
+	{
+		for (size_t i = 0; i < _table.size(); ++i)
+		{
+			if (_table[i])
+				return iterator(_table[i], this);
+		}
+
+		return iterator(nullptr, this);
+	}
+
+	iterator end()
+	{
+		return iterator(nullptr, this);
+	}
+
+	bool Insert(const V& data)
+	{
+		//判断是否扩容
+		CheckCapacity();
+
+		//寻找插入点
+		//通过仿函数对象获取key值
+		KeyofVal kov;
+		size_t index = kov(data) % _table.size();
+		pNode cur = _table[index];
+		while (cur)
+		{
+			if (kov(cur->_data) == kov(data))
+				return false;
+
+			cur = cur->_next;
+		}
+
+		//开始头插
+		cur = new Node(data);
+		cur->_next = _table[index];
+		_table[index] = cur;
+		++_size;
+
+		return true;
+	}
+
+private:
+	void CheckCapacity()
+	{
+		if (_size == _table.size())
+		{
+			size_t newS = _table.size() == 0 ? 1 : 2 * _size;
+			KeyofVal kov;
+
+			vector<pNode> newT(newS);
+			for (size_t i = 0; i < _table.size(); ++i)
+			{
+				pNode cur = _table[i];
+
+				while (cur)
+				{
+					pNode next = cur->_next;
+					size_t index = kov(cur->_data) % newT.size();
+
+					//头插
+					cur->_next = newT[index];
+					newT[index] = cur;
+
+					cur = next;
+				}
+
+				_table[i] = nullptr;
+			}
+
+			_table.swap(newT);
+		}
+	}
+private:
+	size_t _size = 0;
+	vector<pNode> _table;
+};
