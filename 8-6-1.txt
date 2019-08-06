@@ -1,0 +1,111 @@
+#pragma once
+#include <vector>
+
+using namespace std;
+
+//闭散列
+enum STATE
+{
+	EMPTY,		//空
+	EXIST,		//存在
+	DELETE		//删除
+};
+
+template <class K, class V>
+struct HashNode
+{//
+	pair<K,V> _kv;
+	STATE _state = EMPTY;
+};
+
+template <class K, class V>
+class HashTable
+{
+public:
+	typedef HashNode<K, V> Node;
+	typedef Node* pNode;
+
+public:
+	HashTable(size_t N = 10)
+	{
+		_table.resize(N);	//这里不能用reserve,因为reserve只负责开辟空间，不改变size。
+		_size = 0;
+	}
+
+	bool Insert(const pair<K, V>& kv)
+	{
+		CheckCapacity();
+		size_t index = kv.first % _table.size();
+
+		while (_table[index]._state == EXIST)
+		{
+			if (_table[index]._kv.first == kv.first)
+				return false;
+
+			++index;
+
+			if (index == _table.size())
+				index = 0;
+		}
+
+		_table[index]._kv = kv;
+		_table[index]._state = EXIST;
+		++_size;
+
+		return true;
+	}
+
+	pNode Find(const K& key)
+	{
+		size_t index = key % _table.size();
+		while (_table[index]._state != EMPTY)
+		{
+			if (_table[index]._state == EXIST && _table[index]._kv.first == key)
+				return &_table[index];
+
+			++index;
+
+			if (index == _table.size())
+				index = 0;
+		}
+
+		return nullptr;
+	}
+
+	bool Erase(const K& key)
+	{
+		pNode ret = Find(key);
+
+		if (ret)
+		{
+			ret->_state = DELETE;
+			--size;
+			return true;
+		}
+		else
+			return false;
+	}
+private:
+	void CheckCapacity()
+	{
+		if (_size * 10 / _table.size() >= 7)
+		{
+			size_t newC = _table.size() == 0 ? 1 : 2 * _table.size();
+			vector<Node> newT(newC);
+
+			for (size_t i = 0; i < _table.size(); ++i)
+			{
+				if (_table[i]._state == EXIST)
+				{
+					int index = _table[i]._kv.first % newT.size();
+					newT[index] = _table[i];
+				}
+			}
+			_table.swap(newT);
+		}
+	}
+
+private:
+	vector<Node> _table;
+	size_t _size;	//有效元素的数量
+};
