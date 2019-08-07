@@ -1,0 +1,41 @@
+//用于判断非数值类型是否存在
+//需要借助哈希函数将其转换为哈希函数，然后使用位图
+template <class T, class HashFun1, class HashFun2, class HashFun3>
+class BloomFilter
+{
+public:
+	BloomFilter(const size_t s)
+		:_bt(5*s)
+		,_bsize(5*s)
+	{}
+
+	void Set(const T& data)
+	{
+		size_t index1 = HashFun1()(data) % _bsize;
+		size_t index2 = HashFun1()(data) % _bsize;
+		size_t index2 = HashFun1()(data) % _bsize;
+
+		_bt.Set(intdex1);
+		_bt.Set(intdex2);
+		_bt.Set(intdex3);
+	}
+
+	void Find(const T& data)
+	{
+		size_t index1 = HashFun1()(data) % _bsize;
+		if (!_bt.Find(index1))
+			return false;
+		size_t index2 = HashFun1()(data) % _bsize;
+		if (!_bt.Find(index2))
+			return false;
+		size_t index2 = HashFun1()(data) % _bsize;
+		if (!_bt.Find(index3))
+			return false;
+
+		return true; 
+	}
+
+private:
+	bitset _bt;
+	size_t _bsize;
+};
