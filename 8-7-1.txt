@@ -1,0 +1,49 @@
+#pragma once
+#include <vector>
+
+using namespace std;
+
+class bitset
+{
+public:
+	bitset(const size_t size)
+	{
+		_bits.resize((size >> 5) + 1);
+	}
+
+	//插入
+	void Set(const size_t N)
+	{
+		//找到N在数组中的位置
+		size_t index = N >> 5;
+		//找到N在这个位置的具体的一个bit位
+		size_t bitn = N % 32;
+		//bit位置置1
+		_bits[index] |= (1 << bitn);
+
+	}
+
+	//删除
+	void ReSet(const size_t N)
+	{
+		//找到N在数组中的位置
+		size_t index = N >> 5;
+		//找到N在这个位置的具体的一个bit位
+		size_t bitn = N % 32;
+		//bit位置0
+		_bits[index] &= (~(1 << bitn));
+	}
+
+	bool Find(const size_t N)
+	{
+		//找到N在数组中的位置
+		size_t index = N >> 5;
+		//找到N在这个位置的具体的一个bit位
+		size_t bitn = N % 32;
+		//判断是否在数组中
+		return (_bits[index] & (1 << bitn));
+	}
+
+private:
+	vector<int> _bits;
+};
