@@ -1,0 +1,98 @@
+/*************************************************************************
+ *文件名: select.hpp
+ *作者: bean
+ *邮箱: 17331372728@163.com
+ * 创建时间: Wed 07 Aug 2019 06:33:18 PM PDT
+ * 备注:
+ *************************************************************************/
+#ifndef __M_SL_H_
+#define __M_SL_H_
+#include <iostream>
+#include <vector>
+#include <sys/select.h>
+#include "tcpsocket.hpp"
+
+using namespace std;
+
+class Select
+{
+    public:
+        Select()
+            :_max_fd(-1)
+         {
+           FD_ZERO(&_rfds);
+         }
+
+        bool Add(TcpSocket& sock)
+        {
+            int fd = sock.GetFd();
+            //判断当前文件描述符是否已经存在
+            if(FD_ISSET(fd, &_rfds))
+            {
+                cerr << "Is already" << endl;
+                return true;
+            }
+
+            FD_SET(fd, &_rfds);
+            _max_fd = _max_fd > fd ? _max_fd : fd;
+
+            return true;
+        }
+
+        bool Wait (vector<TcpSocket>& list, int time_sec = 3)
+        {
+            struct timeval tv;    
+            tv.tv_sec = time_sec;
+            tv.tv_usec = 0;
+            fd_set fds = _rfds;
+
+            int nfds = select(_max_fd+1, &fds, NULL, NULL, &tv);
+
+            if(nfds < 0)
+            {
+                cerr << "Select error" << endl;
+                return false;
+            }
+            else if(nfds == 0)
+            {
+                cerr << "Select timeout" << endl;
+                return false;
+            }
+            for(int i = 0; i <= _max_fd; ++i)
+            {
+                if(FD_ISSET(i, &fds))
+                {
+                    //实例化一个sock，然后设置这个描述符
+                    TcpSocket sock;
+                    sock.SetFd(i);
+                    //将sock添加到就绪队列中
+                    list.push_back(sock);
+                }
+            }
+
+            return true;
+        }
+        bool Del(TcpSocket& sock)
+        {
+            //获取到当前描述符，然后在写就绪队列中删除
+            int fd = sock.GetFd();
+            FD_CLR(fd, &_rfds);
+
+            //更新最大描述符
+            for(int i = _max_fd; i >= 0; ++i)
+            {
+                if(FD_ISSET(i, &_rfds))
+                {
+                    _max_fd = i;
+                    break;
+                }
+            }
+
+            return true;
+        }
+    private:
+        int _max_fd;
+        fd_set _rfds;
+};
+
+#endif
