@@ -1,0 +1,64 @@
+/*************************************************************************
+*文件名: epoll.c
+*作者: bean
+*邮箱: 17331372728@163.com
+* 创建时间: Thu 08 Aug 2019 05:12:57 AM PDT
+* 备注:这是一个简单的epoll的dome
+*************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/epoll.h>
+
+int main(int argc, char* argv[])
+{
+    int epfd = epoll_create(1);//由于已经忽略size，只要大于0就可以
+    if(epfd < 0)
+    {
+        perror("epoll create error\n");
+        return -1;
+    }
+
+    //描述符
+    struct epoll_event ev;
+    ev.events = EPOLLIN;
+    ev.data.fd = 0;
+
+    //开始监听
+    //int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+    epoll_ctl(epfd, EPOLL_CTL_ADD, 0, &ev);
+
+    while(1)
+    {
+        //循环等待就绪描述符
+        //int epoll_wait(int epfd, struct epoll_event *events,
+        //                      int maxevents, int timeout);
+        struct epoll_event evs[10];    
+        int nfds = epoll_wait(epfd, evs, 10, 3000);
+        // < 0 监控出错，返回继续等待
+        if(nfds < 0)
+        {
+            perror("epoll_wait error\n");
+            continue;
+        }
+        // = 0 监控超时，返回继续等待
+        else if(nfds == 0)
+        {
+            printf("epoll timeout\n");
+            continue;
+        }
+
+        //监控成功
+        for(int i = 0;i < nfds; ++i)
+        {
+            char buff[1024] = {0};
+            read(evs[i].data.fd, buff, 1023);
+            printf("buff:[%s]\n", buff);
+        }
+    }
+
+
+
+	return 0;
+}
+
