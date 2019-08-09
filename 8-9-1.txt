@@ -1,0 +1,52 @@
+#include <string>
+#include <iostream>
+#include <vector>
+#include <stdio.h>
+
+using namespace std;
+
+int main()
+{
+	vector<string> buf = { "S", "B", "Q", "W", "S", "B", "Q", "Y", "SY" };
+	unsigned long n;
+	vector<string> ret;
+	while (cin >> n || n == 0)
+	{
+		if (n == 0)
+		{
+			cout << 0 << endl;
+			continue;
+		}
+		string tmp;
+		if (n % 10 != 0)
+		{
+			tmp.push_back((n % 10) + '0');
+			ret.push_back(tmp);
+		}
+
+		int i = 0;
+
+		while (n /= 10)
+		{
+			tmp = (n % 10) + '0';
+			if ((n % 10) != 0)
+			{
+				ret.push_back(buf[i]);
+				ret.push_back(tmp);
+
+			}
+			else
+			{
+				if (!ret.empty())
+					ret.push_back(tmp);
+			}
+			i++;
+
+		}
+
+		for (int i = ret.size() - 1; i >= 0; --i)
+			cout << ret[i];
+	}
+
+	return 0;
+}
