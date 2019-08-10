@@ -1,0 +1,62 @@
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int bfind(int& i, int& ret, vector<int>& buf, vector<int>& dp)
+{
+	int left = 0, right = ret, mid;
+	while (left < right)
+	{
+		mid = left + ((right - left) >> 1);
+		if (dp[mid] >= buf[i])
+			right = mid;
+		else
+			left = mid + 1;
+	}
+
+	return left;
+
+}
+
+int count(vector<int>& buf)
+{
+	int size = buf.size();
+	int ret = 0;
+	vector<int> dp(size + 1);
+	dp[0] = buf[0];
+
+	for (int i = 1; i < size; ++i)
+	{
+		if (buf[i] > dp[ret])
+			dp[++ret] = buf[i];
+		else
+		{
+			int index = bfind(i, ret, buf, dp);
+			dp[index] = min(dp[index], buf[i]);
+		}
+	}
+
+	return ret + 1;
+}
+
+int main()
+{
+
+	int n;
+
+	while (cin >> n)
+	{
+		vector<int> buf(n);
+		for (int i = 0; i < n; ++i)
+			cin >> buf[i];
+
+		int _max = count(buf);
+
+		cout << _max << endl;
+	}
+
+	return 0;
+}
