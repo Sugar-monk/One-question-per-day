@@ -1,0 +1,38 @@
+#include <iostream>
+#include <vector>
+#include <limits.h>
+
+using namespace std;
+
+typedef unsigned long type;
+
+int main()
+{
+	int n;
+	while (cin >> n)
+	{
+		vector<type> buf(n);
+		for (int i = 0; i < n; ++i)
+			cin >> buf[i];
+
+		int p1 = 0, p2 = 1;
+		type min = buf[1] - buf[0];
+		for (int i = 1; i < n; ++i)
+		{
+			type tmp;
+			if (buf[i] > buf[i - 1])
+				tmp = buf[i] - buf[i - 1];
+			else
+				tmp = buf[i - 1] - buf[i];
+
+			if (tmp < min)
+			{
+				p1 = i - 1;
+				p2 = i;
+				min = tmp;
+			}
+		}
+		cout << buf[p1] << " " << buf[p2] << endl;
+	}
+	return 0;
+}
