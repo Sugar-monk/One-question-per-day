@@ -1,0 +1,38 @@
+/*************************************************************************
+*文件名: signal.c
+*作者: bean
+*邮箱: 17331372728@163.com
+* 创建时间: 2019年08月14日 星期三 08时50分31秒
+* 备注:体会信号处理动作的修改
+*  sighandler_t signal(int signum, sighandler_t handler);
+*  int sigaction(int signum, const struct sigaction *act,struct sigaction *oldact);
+*
+**************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <errno.h>
+
+int main(int argc, char* argv[])
+{
+    //signal(2, SIG_IGN);
+    struct sigaction new_act, old_act;
+    new_act.sa_flags = 0;
+    new_act.sa_handler = SIG_IGN;
+    //int sigemptyset(sigset_t *set);
+    //清空set信号集合
+    sigemptyset(&new_act.sa_mask);
+
+    //使用new_act 替换2号信号的处理动作，将原有动作保存到old_act中。
+    sigaction(2, &new_act, &old_act);
+
+
+    while(1)
+    {
+        printf("sleep~~~~~\n");
+        sleep(5);
+    }
+	return 0;
+}
+
