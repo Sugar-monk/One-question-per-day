@@ -1,0 +1,47 @@
+/*************************************************************************
+*文件名: mask.c
+*作者: bean
+*邮箱: 17331372728@163.com
+* 创建时间: 2019年08月14日 星期三 10时19分28秒
+* 备注:
+*       这个dome实现信号的阻塞，体会信号的可靠和不可靠
+*       先将所有信号全部阻塞
+*       getchar()   在用户按下回车之前，这些信号一直被阻塞
+*       对所有信号解除阻塞
+*       解除阻塞后所有信号将被处理
+*************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <errno.h>
+
+void sigcb(int signo)
+{
+    printf("recv signumber:%d\n", signo);
+}
+
+int main(int argc, char* argv[])
+{
+    signal(SIGINT, sigcb);
+    signal(43, sigcb);
+    sigset_t new_set, old_set;
+    sigemptyset(&new_set);
+    //int sigfillset(sigset_t *set);
+   //向set集合中添加所有信号
+    //       int sigaddset(sigset_t *set, int signum);
+    //       向set集合中添加signum信号
+    sigfillset(&new_set);
+    //int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
+    //阻塞set中的所有信号
+    sigprocmask(SIG_BLOCK, &new_set, &old_set);
+
+    getchar();
+
+    //将set中的信号解除阻塞
+    sigprocmask(SIG_UNBLOCK, &new_set, NULL);
+    //将原来的oldset还原为空，也可以解除阻塞
+    //sigprocmask(SIG_SETMASK, &old_set, NULL);
+	return 0;
+}
+
