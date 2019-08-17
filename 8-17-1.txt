@@ -1,0 +1,28 @@
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	string str1;
+	while (cin >> str1)
+	{
+		string ret;
+		for (auto i = 0; i < str1.size(); ++i)
+		{
+			if (str1[i] >= '0' && str1[i] <= '9')
+			{
+				int tmp = str1[i] - '0';
+				for (int j = 0; j < tmp; ++j)
+					ret.push_back(str1[i - 1]);
+			}
+			else
+				ret.push_back(str1[i]);
+		}
+
+		cout << ret << endl;
+	}
+
+	return 0;
+}
