@@ -1,0 +1,83 @@
+struct Array
+{
+	int* a[3];
+	int len[3];
+};
+
+void merge(struct Array* x, int* output)
+{
+	int len1 = *((x->len) + 0);
+	int len2 = *((x->len) + 1);
+	int len3 = *((x->len) + 2);
+
+
+	int* arr1 = x->a[0];
+	int* arr2 = x->a[1];
+	int* arr3 = x->a[2];
+	vector<int> tmp;
+
+	int a = 0, b = 0;
+	while (a < len1 && b < len2)
+	{
+		if (*arr1 < *arr2)
+		{
+			tmp.push_back(*(arr1++));
+			a++;
+		}
+		else
+		{
+			tmp.push_back(*(arr2++));
+			b++;
+		}
+	}
+	
+	while(a++ < len1)
+		tmp.push_back(*(arr1++));
+	while(b++ < len2)
+		tmp.push_back(*(arr2++));
+
+	int* cur = output;
+	len2 = len2 + len1;
+	a = b = 0;
+
+	while (a < len3 && b < len2)
+	{
+		if (*arr3 < tmp[b])
+		{
+			*cur++ = (*(arr3++));
+			a++;
+		}
+		else
+		{
+			*cur = tmp[b];
+			cur++;
+			b++;
+		}
+			
+	}
+	while (a < len3)
+	{
+		*cur++ = *arr3++;
+		a++;
+	}
+	while (b < len2)
+		*cur++ = tmp[b++];
+}
+int main()
+{
+	Array a;
+	int arr1[] = { 2, 4,5,6,7,8 };
+	int arr2[] = {1,3,4,5,6 };
+	int arr3[] = { 5,6,7,8,9, 10, 11 };
+	a.a[0] = arr1;
+	a.a[1] = arr2;
+	a.a[2] = arr3;
+	a.len[0] = 6;
+	a.len[1] = 5;
+	a.len[2] = 7;
+
+	int output[18];
+	merge(&a, output);
+
+	return 0;
+}
