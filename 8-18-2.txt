@@ -1,0 +1,77 @@
+#include <iostream>
+#include <string>
+#include <algorithm> 
+#include <sstream>
+#include <vector>
+
+using namespace std; 
+
+int Count(const string& str)
+{
+	int ret = 0;
+
+	size_t size = str.size();
+	vector<int> buf;
+	int i = 0;
+	while (i < size)
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			string tmp;
+			
+			while (str[i] >= '0' && str[i] <= '9')
+			{
+				tmp += str[i++];
+			}
+
+			stringstream stream;
+			stream << tmp;
+			int n;
+			stream >> n;
+			buf.push_back(n);
+		}
+		else
+			i++;
+	}
+
+	sort(buf.begin(), buf.end());
+
+	int max_ = 1;
+	int tmp = buf[0];
+	int count = 1;
+	int data = tmp;
+	for (auto i = 1; i < buf.size(); ++i)
+	{
+		if (buf[i] != tmp)
+		{
+			if (count > max_)
+			{
+				max_ = count;
+				data = tmp;
+			}
+			count = 1;
+		}
+		else
+		{
+			count++;
+		}
+		tmp = buf[i];
+	}
+
+	if (count > max_)
+	{
+		max_ = count;
+		data = tmp;
+	}
+	ret = data * max_;
+	return ret;
+}
+int main()
+{
+	string str;
+	while (cin >> str)
+	{
+		cout << Count(str) << endl;
+	}
+	return 0;
+}
